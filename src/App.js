@@ -42,7 +42,7 @@ class App extends React.Component {
       this.getMovieFun();
 
       this.setState({
-        locationResult: locResult.data,
+        locationResult: locResult.data[0],
         showLocInfo: true,
         showError: false,
       });
@@ -138,6 +138,38 @@ class App extends React.Component {
             >
               City name: {this.state.searchQuery}
             </h3>
+             
+            <p
+              style={{
+                fontWeight: 'bold',
+                fontFamily: 'Times New Roman',
+                textAlign: 'center',
+              }}
+            >
+              latitude: {this.state.locationResult.lat}
+            </p>
+            <p
+              style={{
+                fontWeight: 'bold',
+                fontFamily: 'Times New Roman',
+                textAlign: 'center',
+              }}
+            >
+              longitude: {this.state.locationResult.lon}{' '}
+            </p>
+
+            <img
+              style={{
+                display: 'block',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                border: '8px ridge black',
+                padding: '5px',
+              }}
+              src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&center=${this.state.locationResult.lat},${this.state.locationResult.lon}&zoom=10`}
+              alt='city'
+            />
+
             <Row
               xs={1}
               md={3}
