@@ -63,7 +63,7 @@ class App extends React.Component {
 
 
 
-    let reqUrl = `${process.env.REACT_APP_SERVER_LINK}/weather?city=${this.state.searchQuery}`;
+    let reqUrl = `https://city-explorer301.herokuapp.com/weather?city=${this.state.searchQuery}`;
     console.log(reqUrl);
     let weather = await axios.get(reqUrl);
     // console.log("l", locResult);
@@ -77,7 +77,7 @@ class App extends React.Component {
 
   getMovieFun = async (event) => {
   
-    let reqUrl = `${process.env.REACT_APP_SERVER_LINK}/movie?searchQuery=${this.state.searchQuery}`;
+    let reqUrl = `https://city-explorer301.herokuapp.com/movie?searchQuery=${this.state.searchQuery}`;
     console.log(reqUrl);
     let movies = await axios.get(reqUrl);
     // console.log("l", locResult);
