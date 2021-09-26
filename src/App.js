@@ -33,7 +33,10 @@ class App extends React.Component {
     console.log(this.state.searchQuery);
 
     try {
+      let reqUrl =  `https://city-explorer301.herokuapp.com/weather?searchQuery=${this.state.searchQuery}`;
+
       let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
+
       console.log(reqUrl);
       let locResult = await axios.get(reqUrl);
       console.log("locResult", locResult);
