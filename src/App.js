@@ -30,7 +30,7 @@ class App extends React.Component {
   
 
     try {
-      let reqUrl = `${process.env.REACT_APP_SERVER_LINK}/weather?searchQuery=${this.state.searchQuery}`;
+      let reqUrl =  `https://city-explorer301.herokuapp.com/weather?searchQuery=${this.state.searchQuery}`;
       console.log(reqUrl);
       let locResult = await axios.get(reqUrl);
       console.log("locResult", locResult);
