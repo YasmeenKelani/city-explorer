@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import "./App.css";
+import Weather from "./component/weather";
 
 
 class App extends React.Component {
@@ -13,10 +14,13 @@ class App extends React.Component {
     super(props);
     this.state = {
       locationResult: {},
+      weather: [],
+     
       searchQuery: "",
       showLocInfo: false,
       showError: false,
-     
+      showWeather: false,
+   
     };
   }
 
@@ -27,21 +31,22 @@ class App extends React.Component {
       searchQuery: event.target.city.value,
     });
     console.log(this.state.searchQuery);
-  
 
     try {
-      let reqUrl =  `https://city-explorer301.herokuapp.com/weather?searchQuery=${this.state.searchQuery}`;
+      let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
       console.log(reqUrl);
       let locResult = await axios.get(reqUrl);
       console.log("locResult", locResult);
       console.log("seclocResult", locResult.data);
-     
+      
 
       this.setState({
-        locationResult: locResult.data,
+        locationResult: locResult.data[0],
         showLocInfo: true,
         showError: false,
       });
+      this.getWeatherFun();
+
       console.log(this.state.locationResult);
     } catch {
       console.log("something went wrong");
@@ -52,6 +57,23 @@ class App extends React.Component {
     }
   };
 
+  getWeatherFun = async (event) => {
+
+
+
+    let reqUrl = `${process.env.REACT_APP_SERVER_LINK}/weather?searchQuery=${this.state.searchQuery}`;
+    console.log(reqUrl);
+    let weather = await axios.get(reqUrl);
+    // console.log("l", locResult);
+    console.log("seclocResult", weather.data);
+
+    this.setState({
+      weather: weather.data,
+      showWeather: true,
+    });
+  };
+
+ 
   render() {
     return (
       <div>
@@ -63,7 +85,7 @@ class App extends React.Component {
             position: "relative",
             bottom: "20px",
             backgroundColor: "blue",
-            color: "white"
+            color: "white",
           }}
         >
           City Explorer App
@@ -83,17 +105,16 @@ class App extends React.Component {
             <Form.Label style={{ fontWeight: "bold", color: "white" }}>
               City Explorer
             </Form.Label>
-            <Form.Control type="text" name="city" placeholder="Enter city name" />
+            <Form.Control
+              type="text"
+              name="city"
+              placeholder="Enter city name"
+            />
             <Form.Text className="text-muted"></Form.Text>
           </Form.Group>
-          <Button 
-          style = {{opacity:"1"}}
-          
-            type="submit"
-          >
+          <Button style={{ opacity: "1" }} type="submit">
             Explore!
           </Button>
-          
         </Form>
 
         {this.state.showLocInfo && (
@@ -101,11 +122,43 @@ class App extends React.Component {
             <h3
               style={{
                 textAlign: "center",
-                marginTop:"3px",
+                marginTop: "3px",
               }}
             >
               City name: {this.state.searchQuery}
             </h3>
+             
+            <p
+              style={{
+                fontWeight: 'bold',
+                fontFamily: 'Times New Roman',
+                textAlign: 'center',
+              }}
+            >
+              latitude: {this.state.locationResult.lat}
+            </p>
+            <p
+              style={{
+                fontWeight: 'bold',
+                fontFamily: 'Times New Roman',
+                textAlign: 'center',
+              }}
+            >
+              longitude: {this.state.locationResult.lon}{' '}
+            </p>
+
+            <img
+              style={{
+                display: 'block',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                border: '8px ridge black',
+                padding: '5px',
+              }}
+              src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&center=${this.state.locationResult.lat},${this.state.locationResult.lon}&zoom=10`}
+              alt='city'
+            />
+
             <Row
               xs={1}
               md={3}
@@ -115,30 +168,35 @@ class App extends React.Component {
                 margin: "90px",
                 marginTop: "10px",
               }}
-            > 
-              <Card border="primary" style={{ width: "25rem", position:"relative", left: "450px" }}>
-                <Card.Header style={{ fontWeight: "bold", textAlign:"center" }}>City</Card.Header>
+            >
+              <Card
+                border="primary"
+                style={{ width: "25rem", position: "relative", left: "450px" }}
+              >
+                <Card.Header
+                  style={{ fontWeight: "bold", textAlign: "center" }}
+                >
+                  City
+                </Card.Header>
                 <Card.Body>
                   <Card.Text>
-                   <p>  Description : {this.state.locationResult[0].description}
-                   <br></br> Date : {this.state.locationResult[0].date} </p>
-                    <p> Description : {this.state.locationResult[1].description}
-                    <br></br> Date : {this.state.locationResult[1].date} </p> 
-                    <p> Description : {this.state.locationResult[2].description}
-                    <br></br> Date : {this.state.locationResult[2].date} </p>
-                   
+                    {this.state.weather.map((info) => {
+                      return <Weather weather={info} />;
+                    })}
                   </Card.Text>
                 </Card.Body>
               </Card>
-              </Row>
-            </>
+            </Row>
+         
+
+
+          </>
         )}
         {this.state.showError && (
-          <p> something wrong in getting location data</p>
+          <p> something wrong in getting the data</p>
         )}
       </div>
     );
   }
 }
-
 export default App;
