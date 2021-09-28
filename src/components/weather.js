@@ -11,30 +11,11 @@ return (
  </p>
 </>
 
-
-
-
 )
 
 }
 
 
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 export default Weather;
