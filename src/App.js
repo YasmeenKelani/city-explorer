@@ -9,18 +9,22 @@ import "./App.css";
 import Weather from "./components/weather";
 import Movies from "./components/movies";
 
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       locationResult: {},
       weather: [],
+
       movies:[],
+
       searchQuery: "",
       showLocInfo: false,
       showError: false,
       showWeather: false,
       showMovie:false
+
     };
   }
 
@@ -33,22 +37,29 @@ class App extends React.Component {
     console.log(this.state.searchQuery);
 
     try {
-      let reqUrl =  `https://city-explorer301.herokuapp.com/weather?searchQuery=${this.state.searchQuery}`;
 
       let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
+
+//       let reqUrl =  `https://city-explorer301.herokuapp.com/weather?searchQuery=${this.state.searchQuery}`;
+
+//       let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
 
       console.log(reqUrl);
       let locResult = await axios.get(reqUrl);
       console.log("locResult", locResult);
       console.log("seclocResult", locResult.data);
+
       this.getWeatherFun();
       this.getMovieFun();
+
 
       this.setState({
         locationResult: locResult.data[0],
         showLocInfo: true,
         showError: false,
       });
+      this.getWeatherFun();
+
       console.log(this.state.locationResult);
     } catch {
       console.log("something went wrong");
@@ -63,9 +74,11 @@ class App extends React.Component {
 
 
 
-    let reqUrl = `https://city-explorer301.herokuapp.com/weather?city=${this.state.searchQuery}`;
-    console.log(reqUrl);
-    let weather = await axios.get(reqUrl);
+
+    let reqUrlw = `${process.env.REACT_APP_SERVER_LINK}/weather?searchQuery=${this.state.searchQuery}`;
+    console.log(reqUrlw);
+    let weather = await axios.get(reqUrlw);
+
     // console.log("l", locResult);
     console.log("seclocResult", weather.data);
 
@@ -74,6 +87,7 @@ class App extends React.Component {
       showWeather: true,
     });
   };
+
 
   getMovieFun = async (event) => {
   
@@ -201,12 +215,12 @@ class App extends React.Component {
                 </Card.Body>
               </Card>
             </Row>
-         
-         
+          
                 
             {this.state.movies.map((info) => {
               return <Movies movies={info} />;
             })}
+
 
 
           </>
@@ -218,4 +232,6 @@ class App extends React.Component {
     );
   }
 }
+
 export default App;
+
