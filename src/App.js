@@ -61,9 +61,9 @@ class App extends React.Component {
 
 
 
-    let reqUrl = `${process.env.REACT_APP_SERVER_LINK}/weather?searchQuery=${this.state.searchQuery}`;
-    console.log(reqUrl);
-    let weather = await axios.get(reqUrl);
+    let reqUrlw = `${process.env.REACT_APP_SERVER_LINK}/weather?searchQuery=${this.state.searchQuery}`;
+    console.log(reqUrlw);
+    let weather = await axios.get(reqUrlw);
     // console.log("l", locResult);
     console.log("seclocResult", weather.data);
 
