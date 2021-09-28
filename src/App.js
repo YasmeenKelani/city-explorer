@@ -6,7 +6,8 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import "./App.css";
-import Weather from "./component/weather";
+import Weather from "./components/weather";
+import Movies from "./components/movies";
 
 
 class App extends React.Component {
@@ -15,12 +16,15 @@ class App extends React.Component {
     this.state = {
       locationResult: {},
       weather: [],
-     
+
+      movies:[],
+
       searchQuery: "",
       showLocInfo: false,
       showError: false,
       showWeather: false,
-   
+      showMovie:false
+
     };
   }
 
@@ -33,12 +37,21 @@ class App extends React.Component {
     console.log(this.state.searchQuery);
 
     try {
+
       let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
+
+//       let reqUrl =  `https://city-explorer301.herokuapp.com/weather?searchQuery=${this.state.searchQuery}`;
+
+//       let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
+
       console.log(reqUrl);
       let locResult = await axios.get(reqUrl);
       console.log("locResult", locResult);
       console.log("seclocResult", locResult.data);
-      
+
+      this.getWeatherFun();
+      this.getMovieFun();
+
 
       this.setState({
         locationResult: locResult.data[0],
@@ -61,9 +74,11 @@ class App extends React.Component {
 
 
 
+
     let reqUrlw = `${process.env.REACT_APP_SERVER_LINK}/weather?searchQuery=${this.state.searchQuery}`;
     console.log(reqUrlw);
     let weather = await axios.get(reqUrlw);
+
     // console.log("l", locResult);
     console.log("seclocResult", weather.data);
 
@@ -73,7 +88,20 @@ class App extends React.Component {
     });
   };
 
- 
+
+  getMovieFun = async (event) => {
+  
+    let reqUrl = `https://city-explorer301.herokuapp.com/movie?searchQuery=${this.state.searchQuery}`;
+    console.log(reqUrl);
+    let movies = await axios.get(reqUrl);
+    // console.log("l", locResult);
+    console.log("seclocResult", movies.data);
+    this.setState({
+      movies: movies.data,
+      showMovie: true,
+    });
+  };
+
   render() {
     return (
       <div>
@@ -187,7 +215,12 @@ class App extends React.Component {
                 </Card.Body>
               </Card>
             </Row>
-         
+          
+                
+            {this.state.movies.map((info) => {
+              return <Movies movies={info} />;
+            })}
+
 
 
           </>
@@ -199,4 +232,6 @@ class App extends React.Component {
     );
   }
 }
+
 export default App;
+
