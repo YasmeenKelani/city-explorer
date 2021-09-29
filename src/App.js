@@ -9,7 +9,6 @@ import "./App.css";
 import Weather from "./components/weather";
 import Movies from "./components/movies";
 
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -17,14 +16,13 @@ class App extends React.Component {
       locationResult: {},
       weather: [],
 
-      movies:[],
+      movies: [],
 
       searchQuery: "",
       showLocInfo: false,
       showError: false,
       showWeather: false,
-      showMovie:false
-
+      showMovie: false,
     };
   }
 
@@ -37,12 +35,11 @@ class App extends React.Component {
     console.log(this.state.searchQuery);
 
     try {
-
       let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
 
-//       let reqUrl =  `https://city-explorer301.herokuapp.com/weather?searchQuery=${this.state.searchQuery}`;
+      //       let reqUrl =  `https://city-explorer301.herokuapp.com/weather?searchQuery=${this.state.searchQuery}`;
 
-//       let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
+      //       let reqUrl = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&q=${this.state.searchQuery}&format=json`;
 
       console.log(reqUrl);
       let locResult = await axios.get(reqUrl);
@@ -51,7 +48,6 @@ class App extends React.Component {
 
       this.getWeatherFun();
       this.getMovieFun();
-
 
       this.setState({
         locationResult: locResult.data[0],
@@ -71,11 +67,10 @@ class App extends React.Component {
   };
 
   getWeatherFun = async (event) => {
+    // let reqUrlw = `https://city-explorer301.herokuapp.com/weather?city=${this.state.searchQuery}`;
 
+    let reqUrlw = `${process.env.REACT_APP_SERVER_LINK}/weather?city=${this.state.searchQuery}`;
 
-
-
-    let reqUrlw = `https://city-explorer301.herokuapp.com/weather?city=${this.state.searchQuery}`;
     console.log(reqUrlw);
     let weather = await axios.get(reqUrlw);
 
@@ -88,10 +83,11 @@ class App extends React.Component {
     });
   };
 
-
   getMovieFun = async (event) => {
-  
-    let reqUrl = `https://city-explorer301.herokuapp.com/movie?searchQuery=${this.state.searchQuery}`;
+    // let reqUrl = `https://city-explorer301.herokuapp.com/movie?searchQuery=${this.state.searchQuery}`;
+
+    let reqUrl = `${process.env.REACT_APP_SERVER_LINK}/movie?searchQuery=${this.state.searchQuery}`;
+
     console.log(reqUrl);
     let movies = await axios.get(reqUrl);
     // console.log("l", locResult);
@@ -155,36 +151,36 @@ class App extends React.Component {
             >
               City name: {this.state.searchQuery}
             </h3>
-             
+
             <p
               style={{
-                fontWeight: 'bold',
-                fontFamily: 'Times New Roman',
-                textAlign: 'center',
+                fontWeight: "bold",
+                fontFamily: "Times New Roman",
+                textAlign: "center",
               }}
             >
               latitude: {this.state.locationResult.lat}
             </p>
             <p
               style={{
-                fontWeight: 'bold',
-                fontFamily: 'Times New Roman',
-                textAlign: 'center',
+                fontWeight: "bold",
+                fontFamily: "Times New Roman",
+                textAlign: "center",
               }}
             >
-              longitude: {this.state.locationResult.lon}{' '}
+              longitude: {this.state.locationResult.lon}{" "}
             </p>
 
             <img
               style={{
-                display: 'block',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-                border: '8px ridge black',
-                padding: '5px',
+                display: "block",
+                marginLeft: "auto",
+                marginRight: "auto",
+                border: "8px ridge black",
+                padding: "5px",
               }}
               src={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONIQ_KEY}&center=${this.state.locationResult.lat},${this.state.locationResult.lon}&zoom=10`}
-              alt='city'
+              alt="city"
             />
 
             <Row
@@ -215,23 +211,16 @@ class App extends React.Component {
                 </Card.Body>
               </Card>
             </Row>
-          
-                
+
             {this.state.movies.map((info) => {
               return <Movies movies={info} />;
             })}
-
-
-
           </>
         )}
-        {this.state.showError && (
-          <p> something wrong in getting the data</p>
-        )}
+        {this.state.showError && <p> something wrong in getting the data</p>}
       </div>
     );
   }
 }
 
 export default App;
-
